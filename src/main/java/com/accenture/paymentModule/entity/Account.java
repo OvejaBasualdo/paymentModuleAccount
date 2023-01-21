@@ -1,5 +1,6 @@
-package com.accenture.paymentModule.model;
+package com.accenture.paymentModule.entity;
 
+import com.accenture.paymentModule.utils.AccountUtils;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,9 +25,9 @@ public class Account {
     public Account() {
     }
 
-    public Account(String accountNumber, String cbu, BigDecimal balance, LocalDateTime creationDate) {
-        this.accountNumber = accountNumber;
-        this.cbu = cbu;
+    public Account( BigDecimal balance, LocalDateTime creationDate) {
+        this.accountNumber = AccountUtils.generateRandomDigits(10);
+        this.cbu = AccountUtils.generateRandomDigits(22);
         this.balance = balance;
         this.creationDate = creationDate;
     }
@@ -70,4 +71,6 @@ public class Account {
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
+
+
 }
