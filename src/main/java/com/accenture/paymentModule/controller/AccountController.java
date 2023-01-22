@@ -1,20 +1,23 @@
 package com.accenture.paymentModule.controller;
 
-import com.accenture.paymentModule.model.Account;
-import com.accenture.paymentModule.service.IAccountService;
+import com.accenture.paymentModule.entity.Account;
+import com.accenture.paymentModule.repository.AccountRepository;
+import com.accenture.paymentModule.service.AccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/accounts")
 public class AccountController {
     @Autowired
-    private IAccountService accountService;
+    private AccountServiceImpl accountService;
+    @Autowired
+    private AccountRepository accountRepository;
 
     @GetMapping("/list")
     public List<Account> getListAccounts() {
@@ -34,6 +37,13 @@ public class AccountController {
     @GetMapping("/list/cbu/{cbu}")
     public Account getById(@PathVariable String cbu) {
         return accountService.findByCbu(cbu);
+    }
+
+    @PostMapping("/createFirstAccount")
+    public ResponseEntity<Object>createFirstAccount(){
+        Account account= new Account();
+        accountRepository.save(account);
+        return new ResponseEntity<>("Account created", HttpStatus.CREATED);
     }
 
 }

@@ -20,10 +20,10 @@ public class PaymentModuleApplication {
     @Bean
     public CommandLineRunner initData(AccountRepository accountRepository) {
         return (args) -> {
-            Account account = new Account(new BigDecimal(0.00), LocalDateTime.now());
+            Account account = new Account();
             accountRepository.save(account);
-            Account account1 = new Account(new BigDecimal(0.00), LocalDateTime.now());
-            accountRepository.save(account1);
+            /*Account account1 = new Account(new BigDecimal(0.00), LocalDateTime.now());
+            accountRepository.save(account1);*/
         };
     }
 }

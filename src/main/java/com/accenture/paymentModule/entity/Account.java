@@ -1,5 +1,6 @@
 package com.accenture.paymentModule.entity;
 
+import com.accenture.paymentModule.model.User;
 import com.accenture.paymentModule.utils.AccountUtils;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,14 +23,22 @@ public class Account {
     private BigDecimal balance;
     private LocalDateTime creationDate;
 
+    private Long userId;
+
+
     public Account() {
+        this.accountNumber = AccountUtils.generateRandomDigits(10);
+        this.cbu = AccountUtils.generateRandomDigits(22);
+        this.balance = new BigDecimal(0.00);
+        this.creationDate = LocalDateTime.now();
     }
 
-    public Account( BigDecimal balance, LocalDateTime creationDate) {
+    public Account(Long id, BigDecimal balance, LocalDateTime creationDate) {
         this.accountNumber = AccountUtils.generateRandomDigits(10);
         this.cbu = AccountUtils.generateRandomDigits(22);
         this.balance = balance;
         this.creationDate = creationDate;
+
     }
 
     public Long getId() {
