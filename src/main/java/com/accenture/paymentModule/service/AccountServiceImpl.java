@@ -43,8 +43,13 @@ public class AccountServiceImpl implements IAccountService {
     }
 
     @Override
-    public List<Account> findByUserId(Long id) {
-        List<Account> accounts = userRest.getForObject("http://localhost:8001/api/users/list", User.class).getAccounts().stream().toList();
-        return accounts;
+    public List<Account> findByUserId(Long userId) {
+        return accountRepository.findByUserId(userId);
+    }
+
+    @Override
+    public User findUserById(Long id) {
+        User user = userRest.getForObject("http://localhost:8001/api/users/list/{id}", User.class);
+        return user;
     }
 }
