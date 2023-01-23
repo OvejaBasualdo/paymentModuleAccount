@@ -1,15 +1,13 @@
 package com.accenture.paymentModule.controller;
 
 import com.accenture.paymentModule.entity.Account;
+import com.accenture.paymentModule.model.User;
 import com.accenture.paymentModule.repository.AccountRepository;
 import com.accenture.paymentModule.service.AccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -29,21 +27,26 @@ public class AccountController {
         return accountService.findById(id);
     }
 
+    @GetMapping("/list/userId/{userId}")
+    public List<Account> getByUserId(@PathVariable Long userId) {
+        return accountService.findByUserId(userId);
+    }
+
     @GetMapping("/list/accountNumber/{accountNumber}")
     public Account getByAccountNumber(@PathVariable String accountNumber) {
         return accountService.findByAccountNumber(accountNumber);
     }
 
     @GetMapping("/list/cbu/{cbu}")
-    public Account getById(@PathVariable String cbu) {
+    public Account getByCbu(@PathVariable String cbu) {
         return accountService.findByCbu(cbu);
     }
 
-    @PostMapping("/createFirstAccount")
-    public ResponseEntity<Object>createFirstAccount(){
-        Account account= new Account();
-        accountRepository.save(account);
-        return new ResponseEntity<>("Account created", HttpStatus.CREATED);
+    @PostMapping("/createAccount")
+    public Account createAccount(@RequestBody User user) {
+        Account account = new Account(user.getId());
+        return accountRepository.save(account);
+        //return new ResponseEntity<>("Account created", HttpStatus.CREATED);
     }
 
 }
