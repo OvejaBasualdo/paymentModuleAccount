@@ -15,7 +15,9 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.AUTO,generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
+    @Column(unique = true)
     private String accountNumber;
+    @Column(unique = true)
     private String cbu;
     private BigDecimal balance;
     private LocalDateTime creationDate;

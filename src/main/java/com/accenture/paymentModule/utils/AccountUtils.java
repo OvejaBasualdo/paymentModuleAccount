@@ -10,4 +10,16 @@ public final class AccountUtils {
         return randomNumber;
     }
 
+    public static Boolean verifyNumber(String number) {
+        try {
+            Double a = Double.parseDouble(number);
+            System.out.printf(String.valueOf(a));
+            System.out.printf("Integer " + a);
+            return true;
+        } catch (NumberFormatException e) {
+            e.getMessage();
+            return false;
+        }
+    }
+
 }

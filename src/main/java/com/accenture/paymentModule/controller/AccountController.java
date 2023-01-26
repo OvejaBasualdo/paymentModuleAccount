@@ -4,7 +4,10 @@ import com.accenture.paymentModule.entity.Account;
 import com.accenture.paymentModule.model.User;
 import com.accenture.paymentModule.repository.AccountRepository;
 import com.accenture.paymentModule.service.AccountServiceImpl;
+import com.accenture.paymentModule.utils.AccountUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,13 +41,24 @@ public class AccountController {
     }
 
     @GetMapping("/list/cbu/{cbu}")
-    public Account getByCbu(@PathVariable String cbu) {
-        return accountService.findByCbu(cbu);
+    public ResponseEntity<Object> getByCbu(@PathVariable String cbu) {
+        if (cbu.length() != 22) {
+            return new ResponseEntity<>("CBU must have 22 digits", HttpStatus.NOT_FOUND);
+        }
+        if (AccountUtils.verifyNumber(cbu) == false) {
+            return new ResponseEntity<>("CBU only accept digits numbers", HttpStatus.NOT_FOUND);
+        }
+        Account account = accountService.findByCbu(cbu);
+        return new ResponseEntity<>(account, HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/createAccount")
     public Account createAccount(@RequestBody User user) {
-        Account account = new Account(user.getId());
+        Account account;
+        do {
+            account = new Account(user.getId());
+        } while (accountRepository.findByAccountNumber(account.getAccountNumber()) != null
+                || accountRepository.findByCbu(account.getCbu()) != null);
         return accountRepository.save(account);
         //return new ResponseEntity<>("Account created", HttpStatus.CREATED);
     }
