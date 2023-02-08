@@ -1,6 +1,6 @@
-package com.accenture.paymentModule.dtos;
+package com.microservices.paymentModule.dtos;
 
-import com.accenture.paymentModule.entity.Account;
+import com.microservices.paymentModule.entity.Account;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

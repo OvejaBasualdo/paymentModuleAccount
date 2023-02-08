@@ -1,4 +1,4 @@
-package com.accenture.paymentModule.dtos;
+package com.microservices.paymentModule.dtos;
 
 import java.util.Set;
 

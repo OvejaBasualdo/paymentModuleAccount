@@ -1,7 +1,6 @@
-package com.accenture.paymentModule.entity;
+package com.microservices.paymentModule.entity;
 
-import com.accenture.paymentModule.model.User;
-import com.accenture.paymentModule.utils.AccountUtils;
+import com.microservices.paymentModule.utils.AccountUtils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -12,7 +11,7 @@ import java.time.LocalDateTime;
 public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO,generator = "native")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
     @Column(unique = true)
@@ -21,11 +20,26 @@ public class Account {
     private String cbu;
     private BigDecimal balance;
     private LocalDateTime creationDate;
-    @Transient
-    private User user;
+    private Boolean isActive;
     private Long userId;
 
     public Account() {
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Account(Long userId) {
@@ -33,15 +47,8 @@ public class Account {
         this.cbu = AccountUtils.generateRandomDigits(22);
         this.balance = new BigDecimal(0.00);
         this.creationDate = LocalDateTime.now();
+        this.isActive = true;
         this.userId = userId;
-    }
-
-    public Account(Long id, BigDecimal balance, LocalDateTime creationDate) {
-        this.accountNumber = AccountUtils.generateRandomDigits(10);
-        this.cbu = AccountUtils.generateRandomDigits(22);
-        this.balance = balance;
-        this.creationDate = creationDate;
-
     }
 
     public Long getId() {

@@ -1,15 +1,13 @@
-package com.accenture.paymentModule;
+package com.microservices.paymentModule;
 
-import com.accenture.paymentModule.entity.Account;
-import com.accenture.paymentModule.repository.AccountRepository;
+import com.microservices.paymentModule.repository.AccountRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
+@EnableDiscoveryClient//en vez de @EnableEurekaClient
 @SpringBootApplication
 public class PaymentModuleApplication {
 
