@@ -1,5 +1,6 @@
 package com.microservices.paymentModule.service;
 
+import com.microservices.paymentModule.dtos.TransactionDTO;
 import com.microservices.paymentModule.entity.Account;
 import com.microservices.paymentModule.model.User;
 
@@ -15,5 +16,10 @@ public interface IAccountService {
     public void deleteByIdAccountAndIdUser(User user, Long idAccount) throws Exception;
     public void deleteAllUserAccounts(User user) throws Exception;
     public Account createAccount(User user);
+
+    public void updateBalance(TransactionDTO transactionInfoDTO);
+    public void updateBalanceAccountSender(TransactionDTO transactionInfoDTO);
+
+    public void updateBalanceAccountReceiver(TransactionDTO transactionInfoDTO);
 
 }

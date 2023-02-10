@@ -1,5 +1,6 @@
 package com.microservices.paymentModule.controller;
 
+import com.microservices.paymentModule.dtos.TransactionDTO;
 import com.microservices.paymentModule.entity.Account;
 import com.microservices.paymentModule.model.User;
 import com.microservices.paymentModule.repository.AccountRepository;
@@ -81,6 +82,17 @@ public class AccountController {
             e.fillInStackTrace();
             throw new Exception(e.getMessage());
         }
+    }
+    // Endpoint to Update account balance from transactions
+    @PostMapping("/updateBalance")
+    public void updateBalance(@RequestBody TransactionDTO transactionInfoDTO){
+        accountService.updateBalance(transactionInfoDTO);
+    }
+
+    // Endpoint to Update account Sender balance from special transactions
+    @PostMapping("/updateBalanceAccountSender")
+    public void updateBalanceAccountSender(@RequestBody TransactionDTO transactionInfoDTO){
+        accountService.updateBalanceAccountSender(transactionInfoDTO);
     }
 
 }

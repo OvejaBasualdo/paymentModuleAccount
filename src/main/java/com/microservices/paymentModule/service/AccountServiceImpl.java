@@ -1,5 +1,6 @@
 package com.microservices.paymentModule.service;
 
+import com.microservices.paymentModule.dtos.TransactionDTO;
 import com.microservices.paymentModule.entity.Account;
 import com.microservices.paymentModule.exceptions.ElementNotFoundException;
 import com.microservices.paymentModule.exceptions.FoundsException;
@@ -8,6 +9,9 @@ import com.microservices.paymentModule.repository.AccountRepository;
 import com.microservices.paymentModule.utils.AccountUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -118,6 +122,39 @@ public class AccountServiceImpl implements IAccountService {
             throw new FoundsException("Account not found");
         }
     }
+
+    @Override
+    public void updateBalance(TransactionDTO transactionInfoDTO) {
+        //Account account1 = accountRepository.findByNumberAccount(transactionInfoDTO.getAccountNumberSender());
+        Account account1 = accountRepository.findByAccountNumber(transactionInfoDTO.getFromAccount());
+        Account account2 = accountRepository.findByAccountNumber(transactionInfoDTO.getToAccount());
+        BigDecimal total1 = AccountUtils.updateBalance("DEBIT", account1, transactionInfoDTO.getAmount());
+        BigDecimal total2 = AccountUtils.updateBalance("CREDIT", account2, transactionInfoDTO.getAmount());
+        account1.setBalance(total1);
+        account2.setBalance(total2);
+        accountRepository.save(account1);
+        accountRepository.save(account2);
+        logger.info("MSAccounts RestTemplate: updates balances accounts from transaction");
+    }
+
+    @Override
+    public void updateBalanceAccountSender(TransactionDTO transactionInfoDTO) {
+        Account account = accountRepository.findByAccountNumber(transactionInfoDTO.getFromAccount());
+        BigDecimal total = AccountUtils.updateBalance("DEBIT", account, transactionInfoDTO.getAmount());
+        account.setBalance(total);
+        accountRepository.save(account);
+        logger.info("MSAccounts RestTemplate: update balance account sender from special transaction");
+    }
+
+    @Override
+    public void updateBalanceAccountReceiver(TransactionDTO transactionInfoDTO) {
+        Account account = accountRepository.findByAccountNumber(transactionInfoDTO.getToAccount());
+        BigDecimal total = AccountUtils.updateBalance("CREDIT", account, transactionInfoDTO.getAmount());
+        account.setBalance(total);
+        accountRepository.save(account);
+        logger.info("MSAccounts RestTemplate: update balance account receiver from special transaction");
+    }
 }
+
 
 

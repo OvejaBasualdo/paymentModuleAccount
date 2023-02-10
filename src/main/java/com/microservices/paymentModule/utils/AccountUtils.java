@@ -51,5 +51,18 @@ public final class AccountUtils {
         }
     }
 
+    public static BigDecimal updateBalance(String type, Account account, BigDecimal amount) {
+        BigDecimal total;
 
+        total = account.getBalance();
+        switch (type) {
+            case "CREDIT":
+                total = total.add(amount);
+                break;
+            case "DEBIT":
+                total = total.subtract(amount);
+                break;
+        }
+        return total;
+    }
 }
