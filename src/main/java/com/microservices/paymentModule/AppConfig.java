@@ -6,7 +6,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class AppConfig {
-    @Bean("userRest")
+    @Bean("accountRest")
     public RestTemplate registryAccountRestTemplate(){
         return new RestTemplate();
     }
