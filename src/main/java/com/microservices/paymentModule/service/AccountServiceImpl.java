@@ -22,7 +22,7 @@ import java.util.*;
 public class AccountServiceImpl implements IAccountService {
 
     @Autowired
-    private RestTemplate userRest;
+    private RestTemplate accountRest;
     @Autowired
     private AccountRepository accountRepository;
 
@@ -65,7 +65,7 @@ public class AccountServiceImpl implements IAccountService {
         pathVariables.put("id", user.getId().toString());
         try {
             logger.info("Starting with process: getting a user");
-            User userTest = userRest.getForObject("http://localhost:8001/api/users/{id}", User.class, pathVariables);
+            User userTest = accountRest.getForObject("http://localhost:8010/api/users/{id}", User.class, pathVariables);
             do {
                 logger.info("Setting the account to user");
                 account = new Account(user.getId());
@@ -138,12 +138,18 @@ public class AccountServiceImpl implements IAccountService {
     }
 
     @Override
-    public void updateBalanceAccountSender(TransactionDTO transactionInfoDTO) {
+    public Boolean updateBalanceAccountSender(TransactionDTO transactionInfoDTO) {
         Account account = accountRepository.findByAccountNumber(transactionInfoDTO.getFromAccount());
-        BigDecimal total = AccountUtils.updateBalance("DEBIT", account, transactionInfoDTO.getAmount());
-        account.setBalance(total);
-        accountRepository.save(account);
-        logger.info("MSAccounts RestTemplate: update balance account sender from special transaction");
+        if (account.getBalance().compareTo(transactionInfoDTO.getAmount()) >= 0) {
+            BigDecimal total = AccountUtils.updateBalance("DEBIT", account, transactionInfoDTO.getAmount());
+            account.setBalance(total);
+            accountRepository.save(account);
+            logger.info("MSAccounts RestTemplate: update balance account sender from special transaction");
+            return true;
+        }else{
+            logger.info("MSAccounts RestTemplate: This transaction can't be processed because today you don't have money.");
+            return false;
+        }
     }
 
     @Override

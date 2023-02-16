@@ -18,7 +18,7 @@ public interface IAccountService {
     public Account createAccount(User user);
 
     public void updateBalance(TransactionDTO transactionInfoDTO);
-    public void updateBalanceAccountSender(TransactionDTO transactionInfoDTO);
+    public Boolean updateBalanceAccountSender(TransactionDTO transactionInfoDTO);
 
     public void updateBalanceAccountReceiver(TransactionDTO transactionInfoDTO);
 
